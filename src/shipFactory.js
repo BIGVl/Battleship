@@ -1,33 +1,27 @@
-export const shipFactory = (shipLength, coordinates) => {
-  const length = shipLength;
-  const positionArray = [];
+export const shipFactory = (len) => {
+  const length = len;
+  const positionsArray = [];
 
-  //The array is going to be used to remove each number that was hit
-  for (let i = 1; i <= length; i++) {
-    positionArray.push(i);
+  for (let i = 0; i < length; i++) {
+    positionsArray.push(i);
   }
 
-  //Checks if the coordinates are still in the array and if they are removes and replaces them with 'hit'
-  //so when the array contains only 'hit' items the isSunk function will be called
-  function hit(position) {
-    let checker = false;
+  function hit(hitPosition) {
+    const hit = hitPosition - 1;
+    positionsArray.splice(hit, 1, 'hit');
 
-    positionArray.forEach((coord) => {
-      if (position === coord) {
-        positionArray.splice(coord - 1, 1, 'hit');
-        checker = true;
-      }
-    });
+    if (isSunk()) {
+      return 'SUNK!';
+    }
 
-    return checker;
+    return 'hit';
   }
-  //Checks if the positionArray contains only 'hit' items and if it does it declares it  sunk
+
   function isSunk() {
-    const sank = positionArray.every((ele) => {
-      return ele === 'hit';
+    return positionsArray.every((position) => {
+      return position === 'hit';
     });
-    return sank;
   }
 
-  return { hit, isSunk, length };
+  return { length, hit };
 };
