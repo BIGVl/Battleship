@@ -6,14 +6,15 @@ export const shipFactory = (len) => {
     positionsArray.push(i);
   }
 
-  function hit(hitPosition) {
-    const hit = hitPosition - 1;
-    positionsArray.splice(hit, 1, 'hit');
+  let i = 0;
+
+  function hit() {
+    positionsArray.splice(i, 1, 'hit');
 
     if (isSunk()) {
       return 'SUNK!';
     }
-
+    i++;
     return 'hit';
   }
 
