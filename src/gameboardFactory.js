@@ -7,28 +7,42 @@ export const gameboardFactory = () => {
   //Saves all coordinates so the gameboard can keep track of all the misses
   const allCoordinates = [];
   (function createCoordinates() {
-    for (let i = 10; i <= 110; i++) {
+    for (let i = 0; i < 100; i++) {
+      if (i < 10) {
+        i = '0' + i;
+      }
       allCoordinates.push(i);
     }
   })();
 
   //Determines the length of the ships
-
+  let manyShips = 1;
+  let length = 4;
   //Places a new ship at choosen coordinates
-  function placeShips(startingPoint, direction, len) {
+  function placeShips(startingPoint, direction) {
+    console.log(length);
+    console.log(manyShips);
     const coordinates = [];
     if (direction === 'vertical') {
-      for (let i = 0; i < len; i++) {
+      for (let i = 0; i < length; i++) {
         coordinates.push(startingPoint);
         startingPoint = startingPoint + 10;
       }
     } else if (direction === 'orizontal') {
-      for (let i = 0; i < len; i++) {
+      for (let i = 0; i < length; i++) {
         coordinates.push(startingPoint);
         startingPoint = startingPoint + 1;
       }
     }
-    const ship = shipFactory(len);
+    if (manyShips + length < 5) {
+      manyShips = manyShips + 1;
+    } else {
+      manyShips = 1;
+      length = length - 1;
+    }
+
+    const ship = shipFactory(length);
+
     shipsArray.push({ ship, coordinates });
     return coordinates;
   }
@@ -54,6 +68,7 @@ export const gameboardFactory = () => {
         }
       });
     });
+
     return returnValue;
   }
 

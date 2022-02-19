@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Pirata+One&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --main: red;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  font-family: 'Pirata One', cursive;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 4rem auto;
+  grid-template-areas:
+    'header header'
+    'player1 player2';
+}
+
+.header-div {
+  grid-area: header;
+  height: 3.7rem;
+  background-color: rgba(95, 155, 200, 0.9);
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.player1-screen {
+  grid-area: player1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.player2-screen {
+  grid-area: player2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-1,
+.grid-2 {
+  width: 60%;
+  height: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  background: url('../assets/radar.jpg') no-repeat, rgba(50, 230, 256, 0.6);
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-position-x: 50%;
+  background-position-y: 40%;
+  cursor: pointer;
+}
+.cell {
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  width: 10%;
+  height: 10%;
+}

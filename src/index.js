@@ -1,3 +1,10 @@
+import './Style/main.css';
 import { gameboardFactory } from './gameboardFactory';
-import { gamePVP } from './gameController';
 import { createDOM } from './DOM';
+
+const DOM = createDOM();
+
+window.onload = function () {
+  DOM.createGridCells();
+  DOM.createGridCells();
+};
