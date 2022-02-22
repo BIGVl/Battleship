@@ -1,8 +1,9 @@
 export const shipFactory = (len) => {
   const length = len;
   const positionsArray = [];
-
-  for (let i = 0; i < length; i++) {
+  console.log(len);
+  console.log(positionsArray);
+  for (let i = 0; i <= length; i++) {
     positionsArray.push(i);
   }
 

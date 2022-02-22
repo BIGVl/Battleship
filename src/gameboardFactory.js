@@ -18,20 +18,22 @@ export const gameboardFactory = () => {
   //Determines the length of the ships
   let manyShips = 1;
   let length = 4;
+
   //Places a new ship at choosen coordinates
-  function placeShips(startingPoint, direction) {
-    console.log(length);
-    console.log(manyShips);
+  function placeShips(x, y, direction) {
+    if (shipsArray.length >= 10) return;
+    x = parseInt(x);
+    y = parseInt(y);
     const coordinates = [];
     if (direction === 'vertical') {
       for (let i = 0; i < length; i++) {
-        coordinates.push(startingPoint);
-        startingPoint = startingPoint + 10;
+        coordinates.push({ x, y });
+        x = x + 1;
       }
     } else if (direction === 'orizontal') {
       for (let i = 0; i < length; i++) {
-        coordinates.push(startingPoint);
-        startingPoint = startingPoint + 1;
+        coordinates.push({ x, y });
+        y = y + 1;
       }
     }
     if (manyShips + length < 5) {
@@ -42,16 +44,17 @@ export const gameboardFactory = () => {
     }
 
     const ship = shipFactory(length);
-
     shipsArray.push({ ship, coordinates });
+
     return coordinates;
   }
 
   //Checks if the the selected coordinates are occupied by a ship or not and
   //calls the hit function on that specific ship or marks the miss.
   function receiveAttack(x, y) {
+    x = parseInt(x);
+    y = parseInt(y);
     const hitCoordinates = x + '' + y;
-
     if (allCoordinates[hitCoordinates] === 'x') {
       return null;
     }
@@ -59,16 +62,17 @@ export const gameboardFactory = () => {
 
     let returnValue = 'miss';
     shipsArray.forEach((ship) => {
-      ship.coordinates.forEach((coord) => {
-        if (coord == hitCoordinates) {
+      return ship.coordinates.find((coord) => {
+        if (coord.x === x && coord.y === y) {
           returnValue = ship.ship.hit();
           if (returnValue === 'SUNK!') {
+            console.log();
             wreckedShips.push(returnValue);
           }
         }
       });
     });
-
+    console.log(returnValue);
     return returnValue;
   }
 

@@ -24,7 +24,7 @@ body {
     'player1 player2';
 }
 
-.header-div {
+header {
   grid-area: header;
   height: 3.7rem;
   background-color: rgba(95, 155, 200, 0.9);
@@ -56,8 +56,8 @@ body {
 
 .grid-1,
 .grid-2 {
-  width: 60%;
-  height: 50%;
+  width: 65%;
+  height: 65%;
   display: flex;
   flex-wrap: wrap;
   background: url('../assets/radar.jpg') no-repeat, rgba(50, 230, 256, 0.6);

@@ -1,10 +1,11 @@
 import './Style/main.css';
 import { gameboardFactory } from './gameboardFactory';
 import { createDOM } from './DOM';
-
-const DOM = createDOM();
+import { Player } from './player';
+import { gameLogic } from './gameLogic';
 
 window.onload = function () {
+  const DOM = createDOM();
   DOM.createGridCells();
-  DOM.createGridCells();
+  gameLogic();
 };
