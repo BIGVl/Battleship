@@ -17,33 +17,33 @@ export const gameboardFactory = () => {
 
   //Determines the length of the ships
   let manyShips = 1;
-  let length = 4;
+  let index = 3;
 
   //Places a new ship at choosen coordinates
   function placeShips(x, y, direction) {
-    if (shipsArray.length >= 10) return;
     x = parseInt(x);
     y = parseInt(y);
     const coordinates = [];
     if (direction === 'vertical') {
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i <= index; i++) {
         coordinates.push({ x, y });
         x = x + 1;
       }
     } else if (direction === 'orizontal') {
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i <= index; i++) {
         coordinates.push({ x, y });
         y = y + 1;
       }
     }
-    if (manyShips + length < 5) {
+    const ship = shipFactory(index);
+
+    if (manyShips + index < 4) {
       manyShips = manyShips + 1;
     } else {
       manyShips = 1;
-      length = length - 1;
+      index = index - 1;
     }
 
-    const ship = shipFactory(length);
     shipsArray.push({ ship, coordinates });
 
     return coordinates;
@@ -66,13 +66,12 @@ export const gameboardFactory = () => {
         if (coord.x === x && coord.y === y) {
           returnValue = ship.ship.hit();
           if (returnValue === 'SUNK!') {
-            console.log();
             wreckedShips.push(returnValue);
           }
         }
       });
     });
-    console.log(returnValue);
+
     return returnValue;
   }
 

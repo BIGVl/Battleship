@@ -1,8 +1,7 @@
 export const shipFactory = (len) => {
   const length = len;
   const positionsArray = [];
-  console.log(len);
-  console.log(positionsArray);
+
   for (let i = 0; i <= length; i++) {
     positionsArray.push(i);
   }
@@ -11,6 +10,7 @@ export const shipFactory = (len) => {
 
   function hit() {
     positionsArray.splice(i, 1, 'hit');
+    console.log(positionsArray);
 
     if (isSunk()) {
       return 'SUNK!';

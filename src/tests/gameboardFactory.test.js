@@ -22,7 +22,7 @@ on the right ship or marks the postion to keep track of already hitten positons'
   expect(gameboard.receiveAttack(1, 3)).toBe('hit');
   expect(gameboard.receiveAttack(9, 5)).toBe('miss');
   expect(gameboard.receiveAttack(9, 5)).toBe(null);
-  expect(gameboard.receiveAttack(1, 2)).toBe('hit');
+  expect(gameboard.receiveAttack(1, 2)).toBe('SUNK!');
   expect(gameboard.areAllShipsWrecked()).toBe(false);
   expect(gameboard.receiveAttack(1, 4)).toBe('hit');
   expect(gameboard.receiveAttack(1, 5)).toBe('hit');

@@ -1,27 +1,30 @@
-import './Style/main.css';
-import { gameboardFactory } from './gameboardFactory';
-import { createDOM } from './DOM';
+import { listeners } from './DOM';
 import { Player } from './player';
+
+const listener = listeners();
 
 export const gameLogic = () => {
   const player1 = new Player('YOYO');
   const player2 = new Player('XOXO');
-
   const board1 = document.querySelector('.grid-1');
   const board2 = document.querySelector('.grid-2');
 
-  player1.gameboard.placeShips(1, 1, 'vertical');
-  player1.gameboard.placeShips(1, 0, 'vertical');
-  player1.gameboard.placeShips(1, 2, 'vertical');
-  player1.gameboard.placeShips(1, 3, 'vertical');
-  player1.gameboard.placeShips(1, 4, 'vertical');
-  player1.gameboard.placeShips(1, 5, 'vertical');
-  console.log(player1.gameboard.shipsArray);
-
-  board1.addEventListener('click', function (e) {
+  board1.addEventListener('mousedown', (e) => {
+    if (player1.gameboard.shipsArray.length >= 10) return;
     const x = e.target.dataset.x;
     const y = e.target.dataset.y;
 
-    player1.gameboard.receiveAttack(x, y);
+    const coord = player1.gameboard.placeShips(x, y, 'orizontal');
+    listener.renderShips(coord);
   });
+
+  //Checks each attack if all the ships have been sunk
+  function checkForWinner() {
+    if (player1.gameboard.areAllShipsWrecked() === true) {
+      console.log('player2 WON!');
+    } else if (player2.gameboard.areAllShipsWrecked() === true) {
+      console.log('player1 WON');
+    }
+  }
+  return { checkForWinner };
 };
