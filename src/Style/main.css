@@ -40,24 +40,41 @@ header {
   letter-spacing: 2px;
 }
 
-.player1-screen {
+.player1-screen,
+.player2-screen {
   grid-area: player1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-rows: 25% 75%;
+  grid-template-areas:
+    'ships'
+    'grids';
 }
 
 .player2-screen {
   grid-area: player2;
+}
+
+.ships-div1 {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 10px;
+}
+
+.ship {
+  grid-area: ships;
+  height: 3.33em;
+  background-color: aquamarine;
+  border: 1px solid black;
 }
 
 .grid-1,
 .grid-2 {
-  width: 65%;
-  height: 65%;
+  grid-area: grids;
+  justify-self: center;
+
+  width: 33.3em;
+  height: 33.3em;
   display: flex;
   flex-wrap: wrap;
   background: url('../assets/radar.jpg') no-repeat, rgba(50, 230, 256, 0.6);

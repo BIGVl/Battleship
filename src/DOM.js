@@ -1,7 +1,34 @@
 export const createDOM = () => {
   const grid1 = document.querySelector('.grid-1');
   const grid2 = document.querySelector('.grid-2');
+  const player1 = document.querySelector('.player1-screen');
+  const player2 = document.querySelector('.player2-screen');
   //Creates both grids for the players
+
+  function createShips() {
+    const shipsDiv1 = document.createElement('div');
+    let manyShips = 0;
+    let length = 4;
+
+    for (let i = 1; i <= 10; i++) {
+      if (manyShips + length <= 4) {
+        manyShips = manyShips + 1;
+      } else {
+        manyShips = 1;
+        length = length - 1;
+      }
+      const ship = document.createElement('div');
+      ship.draggable = 'true';
+      ship.dataset.length = length;
+      let width = 53.27 * length;
+      width = width.toFixed(2);
+      ship.style.cssText = `width:${width}px;`;
+      ship.addEventListener('drag');
+
+      shipsDiv1.appendChild(ship).classList.add('ship');
+    }
+    player1.appendChild(shipsDiv1).classList.add('ships-div1');
+  }
 
   function createGridCells() {
     let x = 0;
@@ -36,13 +63,16 @@ export const createDOM = () => {
     }
   }
 
-  return { createGridCells };
+  return { createGridCells, createShips };
 };
 
 //DOM Manipulation
-export const listeners = () => {
-  const grid1 = document.querySelector('.grid-1');
-  const grid2 = document.querySelector('.grid-2');
+export const manipulateDOM = () => {
+  const grids = document.querySelectorAll('[data-grid]');
+
+  grids.forEach((grid) => {
+    grid.addEventListener('drag', () => {});
+  });
   // function receiveAttack(player, board) {
   //   board.addEventListener('click', function (e) {
   //     const x = e.target.dataset.x;
@@ -53,7 +83,6 @@ export const listeners = () => {
   // }
 
   function renderShips(coordinatesArray) {
-    console.log(coordinatesArray);
     coordinatesArray.forEach((xy) => {
       const cell = grid1.querySelector(`[data-x="${xy.x}"][data-y="${xy.y}"]`);
       cell.style.cssText = 'background-color:rgba(160,160,160,0.7)';

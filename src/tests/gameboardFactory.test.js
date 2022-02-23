@@ -2,17 +2,6 @@ import { gameboardFactory } from '../gameboardFactory';
 
 const gameboard = gameboardFactory();
 
-gameboard.placeShips(1, 3, 'vertical');
-gameboard.placeShips(1, 4, 'vertical');
-gameboard.placeShips(1, 5, 'vertical');
-gameboard.placeShips(1, 6, 'vertical');
-gameboard.placeShips(1, 7, 'vertical');
-gameboard.placeShips(1, 8, 'vertical');
-gameboard.placeShips(1, 9, 'vertical');
-gameboard.placeShips(1, 2, 'vertical');
-gameboard.placeShips(1, 1, 'vertical');
-gameboard.placeShips(1, 0, 'vertical');
-
 test('check if the ships array has all the ships ', () => {
   expect(gameboard.shipsArray.length).toBe(10);
 });

@@ -15,11 +15,9 @@ export const gameboardFactory = () => {
     }
   })();
 
-  //Determines the length of the ships
-  let manyShips = 1;
-  let index = 3;
-
   //Places a new ship at choosen coordinates
+  //This is redundant, you are going to place ships in a diferrent way, after the user click start when he finishes adding the ships, then for each ship
+  //you takes it's coordinates and then create the ships based on each coordinate, you will have to refactor the receiveAttack as well
   function placeShips(x, y, direction) {
     x = parseInt(x);
     y = parseInt(y);
@@ -36,13 +34,6 @@ export const gameboardFactory = () => {
       }
     }
     const ship = shipFactory(index);
-
-    if (manyShips + index < 4) {
-      manyShips = manyShips + 1;
-    } else {
-      manyShips = 1;
-      index = index - 1;
-    }
 
     shipsArray.push({ ship, coordinates });
 
