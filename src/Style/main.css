@@ -9,7 +9,10 @@
 }
 
 :root {
-  --main: red;
+  --ship: #03045e;
+  --grid: #caf0f8;
+  --border: #03045e;
+  --yet-ship: #0077b6;
 }
 
 body {
@@ -27,7 +30,7 @@ body {
 header {
   grid-area: header;
   height: 3.7rem;
-  background-color: rgba(95, 155, 200, 0.9);
+  background-color: #023e8a;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
   display: flex;
@@ -64,8 +67,38 @@ header {
 .ship {
   grid-area: ships;
   height: 3.33em;
-  background-color: aquamarine;
-  border: 1px solid black;
+  background-color: var(--yet-ship);
+  border: 1px solid var(--border);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+}
+
+.ship.vertical {
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.reverse-img {
+  filter: invert(77%) sepia(2%) saturate(24%) hue-rotate(320deg) brightness(88%) contrast(92%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cell > .ship:hover > .reverse-img {
+  opacity: 1;
+}
+
+.dragover {
+  background-color: var(--yet-ship);
+  border: 1px solid var(--border);
+}
+
+.dragged {
+  background-color: var(--ship);
+  border: 1px solid var(--border);
+  z-index: 5;
 }
 
 .grid-1,
@@ -77,13 +110,20 @@ header {
   height: 33.3em;
   display: flex;
   flex-wrap: wrap;
-  background: url('../assets/radar.jpg') no-repeat, rgba(50, 230, 256, 0.6);
-  background-blend-mode: overlay;
-  background-size: cover;
+  background: var(--grid);
   background-position-x: 50%;
   background-position-y: 40%;
   cursor: pointer;
 }
+
+[data-y='9'] {
+  border-right: 1px solid black;
+}
+
+[data-x='9'] {
+  border-bottom: 1px solid black;
+}
+
 .cell {
   border-top: 1px solid black;
   border-left: 1px solid black;
