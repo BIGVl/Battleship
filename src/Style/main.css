@@ -9,10 +9,10 @@
 }
 
 :root {
-  --ship: #03045e;
-  --grid: #caf0f8;
-  --border: #03045e;
-  --yet-ship: #0077b6;
+  --ship: #ca6702;
+  --grid: #0a9396;
+  --border: #ae2012;
+  --yet-ship: #e9d8a6;
 }
 
 body {
@@ -30,7 +30,7 @@ body {
 header {
   grid-area: header;
   height: 3.7rem;
-  background-color: #023e8a;
+  background-color: #005f73;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
   display: flex;
@@ -39,8 +39,8 @@ header {
 }
 
 .title {
-  font-size: 2.5rem;
-  letter-spacing: 2px;
+  font-size: 2.9rem;
+  letter-spacing: 0.5rem;
 }
 
 .player1-screen,
@@ -84,6 +84,8 @@ header {
   filter: invert(77%) sepia(2%) saturate(24%) hue-rotate(320deg) brightness(88%) contrast(92%);
   opacity: 0;
   pointer-events: none;
+  width: 18px;
+  height: 18px;
 }
 
 .cell > .ship:hover > .reverse-img {
@@ -98,7 +100,6 @@ header {
 .dragged {
   background-color: var(--ship);
   border: 1px solid var(--border);
-  z-index: 5;
 }
 
 .grid-1,
@@ -129,4 +130,11 @@ header {
   border-left: 1px solid black;
   width: 10%;
   height: 10%;
+}
+
+.off {
+  pointer-events: none;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }

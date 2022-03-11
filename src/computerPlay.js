@@ -1,4 +1,4 @@
-import { gameboardFactory } from './gameboardFactory';
+import { gameboardFactory } from './Factories/gameboardFactory';
 
 export class computerPlayer {
   constructor() {

@@ -1,10 +1,17 @@
 import reverse from './assets/reverse.png';
 
 export const createDOM = () => {
-  const grid1 = document.querySelector('.grid-1');
-  const grid2 = document.querySelector('.grid-2');
-  const player1 = document.querySelector('.player1-screen');
-  const player2 = document.querySelector('.player2-screen');
+  const body = document.querySelector('body');
+  const grid1 = document.createElement('div');
+  const grid2 = document.createElement('div');
+  grid1.dataset.grid = '1';
+  grid2.dataset.grid = '2';
+  const player1 = document.createElement('div');
+  const player2 = document.createElement('div');
+  body.appendChild(player1).classList.add('player1-screen');
+  body.appendChild(player2).classList.add('player2-screen');
+  player1.appendChild(grid1).classList.add('grid-1');
+  player2.appendChild(grid2).classList.add('grid-2');
 
   //Creates both grids for the players
   function createShips() {
@@ -76,8 +83,8 @@ export const createDOM = () => {
 export const manipulateDOM = () => {
   const grids = document.querySelectorAll('[data-grid]');
   const ships = document.querySelectorAll('.ship');
-  const shipDiv = document.querySelector('.ships-div1');
   let dragged;
+  const initialCoordinates = [];
 
   //Adding events for the ships when the drag starts and ends and also a click one that will change the direction it goes
   //"orizonta" or "vertical"
@@ -87,7 +94,7 @@ export const manipulateDOM = () => {
     });
 
     ship.addEventListener('dragstart', (e) => {
-      changeBusynessState(e);
+      storeInitalCoordinates(e);
     });
 
     ship.addEventListener('dragend', (e) => {
@@ -96,11 +103,12 @@ export const manipulateDOM = () => {
 
     ship.addEventListener('click', (e) => {
       if (!e.target.parentElement.classList.contains('cell')) return;
+      storeInitalCoordinates(e);
       dragged = e.target;
       if (checkValidDrop(e, 'click')) return;
-      checkNearCells(e, 'click');
+      if (checkNearCells(e, 'click')) return;
       ship.classList.toggle('vertical');
-      changeBusynessState(e, 'click');
+      removeBusyState(e, 'click');
       if (ship.classList.contains('vertical')) {
         let body = 53.27 * e.target.dataset.length;
         body = body.toFixed(2);
@@ -115,6 +123,8 @@ export const manipulateDOM = () => {
   });
 
   grids.forEach((grid) => {
+    grid.addEventListener('dragenter', (e) => {});
+
     grid.addEventListener('dragover', (e) => {
       e.preventDefault();
       const length = dragged.dataset.length;
@@ -147,7 +157,10 @@ export const manipulateDOM = () => {
       leavedCell.forEach((leaved) => {
         leaved.classList.remove('dragover');
       });
+
       if (checkValidDrop(e)) return;
+      if (checkNearCells(e)) return;
+      removeBusyState(e);
       addShipsToCells(e);
     });
   });
@@ -181,6 +194,27 @@ export const manipulateDOM = () => {
     }
   }
 
+  function storeInitalCoordinates(e) {
+    initialCoordinates.splice(0, initialCoordinates.length);
+    dragged = e.target;
+    if (dragged.parentElement.classList.contains('cell')) {
+      const length = dragged.dataset.length;
+      let x = e.target.parentElement.dataset.x;
+      let y = e.target.parentElement.dataset.y;
+      x = parseInt(x);
+      y = parseInt(y);
+
+      for (let i = 0; i < length; i++) {
+        initialCoordinates.push({ x, y });
+        if (dragged.classList.contains('vertical')) {
+          x = x + 1;
+        } else {
+          y = y + 1;
+        }
+      }
+    }
+  }
+
   //Checks if there is a ship already on any cell or if it does not fit in the grid and cancels the action if true
   function checkValidDrop(e, action) {
     const length = dragged.dataset.length;
@@ -200,7 +234,14 @@ export const manipulateDOM = () => {
     const firstCell = document.querySelector(`[data-x='${x}'][data-y='${y}']`);
 
     for (let i = 0; i < length; i++) {
+      initialCoordinates.forEach((xy) => {
+        if (xy.x === x && xy.y === y) return;
+      });
       const cell = document.querySelector(`[data-x='${x}'][data-y='${y}']`);
+      let currentCell;
+      if (dragged.parentElement.classList.contains('cell') && initialCoordinates.length !== 0) {
+        currentCell = document.querySelector(`[data-x='${initialCoordinates[i].x}'][data-y='${initialCoordinates[i].y}']`);
+      }
 
       if (dragged.classList.contains('vertical')) {
         if (action === 'click') {
@@ -226,6 +267,8 @@ export const manipulateDOM = () => {
           }
         }
       } else if (cell === null || (cell.classList.contains('busy') && theCell !== cell)) {
+        if (currentCell === cell) return;
+
         check = true;
       }
     }
@@ -233,46 +276,50 @@ export const manipulateDOM = () => {
     return check;
   }
 
-  function changeBusynessState(e, action) {
-    dragged = e.target;
-    e.target.style.opacity = '0.6';
-    const cell = e.target.parentElement;
-    if (cell.classList.contains('cell')) {
-      let y = cell.dataset.y;
-      let x = cell.dataset.x;
+  function removeBusyState(e, action) {
+    if (action === 'click') {
+      let x = e.target.parentElement.dataset.x;
+      let y = e.target.parentElement.dataset.y;
       y = parseInt(y);
       x = parseInt(x);
-      for (let i = 0; i < dragged.dataset.length; i++) {
-        const theCell = document.querySelector(`[data-x='${x}'][data-y='${y}']`);
-        //Even though when vertical we should target x axis, this function should delete where the ship was previously placed when clicked, so it deletes the
-        //busy class from the cells that were occupied
-        theCell.classList.remove('busy');
+      const length = dragged.dataset.length;
+
+      for (let i = 0; i < length; i++) {
+        const cell = document.querySelector(`[data-x='${x}'][data-y='${y}']`);
+        cell.classList.remove('busy');
         if (dragged.classList.contains('vertical')) {
-          if (action === 'click') {
-            y = y + 1;
-          } else {
-            x = x + 1;
-          }
+          y = y + 1;
         } else {
-          if (action === 'click') {
-            x = x + 1;
-          } else {
-            y = y + 1;
-          }
+          x = x + 1;
         }
       }
+    } else {
+      initialCoordinates.forEach((xy) => {
+        const cell = document.querySelector(`[data-x='${xy.x}'][data-y='${xy.y}']`);
+        cell.classList.remove('busy');
+      });
     }
   }
 
   // Check if the nearby cells are already ocuppied so 2 ships can not be placed right next to each other
   function checkNearCells(e, action) {
     const length = dragged.dataset.length;
-    let x = e.target.parentElement.dataset.x;
-    let y = e.target.parentElement.dataset.y;
+    let x;
+    let y;
+    let busy = false;
+    if (action === 'click') {
+      x = e.target.parentElement.dataset.x;
+      y = e.target.parentElement.dataset.y;
+    } else {
+      x = e.target.dataset.x;
+      y = e.target.dataset.y;
+    }
+
     y = parseInt(y);
     x = parseInt(x);
     const occupiedCells = [];
-    const NEIGHBOURCELLS = [];
+    const addX = [-1, 0, 1];
+    const addY = [-1, 0, 1];
 
     for (let i = 0; i < length; i++) {
       occupiedCells.push({ x, y });
@@ -291,12 +338,37 @@ export const manipulateDOM = () => {
         }
       }
     }
+
     occupiedCells.forEach((cell) => {
       let y = cell.y;
       let x = cell.x;
+      x = parseInt(x);
+      y = parseInt(y);
 
-      const nearCell = document.querySelector(document.querySelector(`[data-x='${x}'][data-y='${y}']`));
+      addX.forEach((adx) => {
+        let numX = x + adx;
+        if (numX < 0 || numX > 9) numX = x;
+
+        addY.forEach((ady) => {
+          let numY = y + ady;
+          if (numY < 0 || numY > 9) numY = y;
+          let checker = false;
+          occupiedCells.forEach((cell) => {
+            if (numX === cell.x && numY === cell.y) return (checker = true);
+          });
+
+          if (checker === true) return;
+          const cell = document.querySelector(`[data-x='${numX}'][data-y='${numY}']`);
+
+          const isYours = initialCoordinates.find((xy) => {
+            if (xy.x === numX && xy.y === numY) return true;
+          });
+
+          if (cell.classList.contains('busy') && !isYours) busy = true;
+        });
+      });
     });
+    return busy;
   }
 
   function renderShips(coordinatesArray, grid) {

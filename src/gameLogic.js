@@ -1,5 +1,5 @@
 import { manipulateDOM } from './DOM';
-import { Player } from './player';
+import { Player } from './Factories/player';
 
 export const gameLogic = () => {
   const player1 = new Player('YOYO');
