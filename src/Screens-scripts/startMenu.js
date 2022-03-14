@@ -10,5 +10,5 @@ export const startScreen = () => {
   mainBody.appendChild(pvc).classList.add('start-pvc');
   body.appendChild(mainBody).classList.add('start-body');
 
-  pvp.addEventListener('click', (e) => {});
+  return { pvp, pvc };
 };

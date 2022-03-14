@@ -106,7 +106,7 @@ header {
 .grid-2 {
   grid-area: grids;
   justify-self: center;
-
+  overflow: hidden;
   width: 33.3em;
   height: 33.3em;
   display: flex;

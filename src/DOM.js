@@ -14,8 +14,8 @@ export const createDOM = () => {
   player2.appendChild(grid2).classList.add('grid-2');
 
   //Creates both grids for the players
-  function createShips() {
-    const shipsDiv1 = document.createElement('div');
+  function createShips(playerScreen) {
+    const shipsDiv = document.createElement('div');
 
     let manyShips = 0;
     let length = 4;
@@ -38,9 +38,10 @@ export const createDOM = () => {
       ship.style.cssText = `width:${width}px;`;
 
       ship.appendChild(reverseIt).classList.add('reverse-img');
-      shipsDiv1.appendChild(ship).classList.add('ship');
+      shipsDiv.appendChild(ship).classList.add('ship');
     }
-    player1.appendChild(shipsDiv1).classList.add('ships-div1');
+
+    playerScreen.appendChild(shipsDiv).classList.add('ships-div1');
   }
 
   function createGridCells() {
@@ -80,8 +81,7 @@ export const createDOM = () => {
 };
 
 //DOM Manipulation
-export const manipulateDOM = () => {
-  const grids = document.querySelectorAll('[data-grid]');
+export const manipulateDOM = (grid) => {
   const ships = document.querySelectorAll('.ship');
   let dragged;
   const initialCoordinates = [];
@@ -95,6 +95,7 @@ export const manipulateDOM = () => {
 
     ship.addEventListener('dragstart', (e) => {
       storeInitalCoordinates(e);
+      dragged = e.target;
     });
 
     ship.addEventListener('dragend', (e) => {
@@ -122,47 +123,46 @@ export const manipulateDOM = () => {
     });
   });
 
-  grids.forEach((grid) => {
-    grid.addEventListener('dragenter', (e) => {});
+  console.log(grid);
+  grid.addEventListener('dragenter', (e) => {});
 
-    grid.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      const length = dragged.dataset.length;
-      let x = e.target.dataset.x;
-      let y = e.target.dataset.y;
-      x = parseInt(x);
-      y = parseInt(y);
+  grid.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    const length = dragged.dataset.length;
+    let x = e.target.dataset.x;
+    let y = e.target.dataset.y;
+    x = parseInt(x);
+    y = parseInt(y);
 
-      for (let i = 0; i < length; i++) {
-        const cell = document.querySelector(`[data-x='${x}'][data-y='${y}']`);
-        if (dragged.classList.contains('vertical')) {
-          x = x + 1;
-        } else {
-          y = y + 1;
-        }
-        if (cell !== null) cell.classList.add('dragover');
+    for (let i = 0; i < length; i++) {
+      const cell = document.querySelector(`[data-x='${x}'][data-y='${y}']`);
+      if (dragged.classList.contains('vertical')) {
+        x = x + 1;
+      } else {
+        y = y + 1;
       }
+      if (cell !== null) cell.classList.add('dragover');
+    }
+  });
+
+  grid.addEventListener('dragleave', (e) => {
+    const leavedCell = document.querySelectorAll('.dragover');
+    leavedCell.forEach((leaved) => {
+      leaved.classList.remove('dragover');
+    });
+  });
+
+  grid.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const leavedCell = document.querySelectorAll('.dragover');
+    leavedCell.forEach((leaved) => {
+      leaved.classList.remove('dragover');
     });
 
-    grid.addEventListener('dragleave', (e) => {
-      const leavedCell = document.querySelectorAll('.dragover');
-      leavedCell.forEach((leaved) => {
-        leaved.classList.remove('dragover');
-      });
-    });
-
-    grid.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const leavedCell = document.querySelectorAll('.dragover');
-      leavedCell.forEach((leaved) => {
-        leaved.classList.remove('dragover');
-      });
-
-      if (checkValidDrop(e)) return;
-      if (checkNearCells(e)) return;
-      removeBusyState(e);
-      addShipsToCells(e);
-    });
+    if (checkValidDrop(e)) return;
+    if (checkNearCells(e)) return;
+    removeBusyState(e);
+    addShipsToCells(e);
   });
 
   function addShipsToCells(e, action) {
@@ -371,12 +371,7 @@ export const manipulateDOM = () => {
     return busy;
   }
 
-  function renderShips(coordinatesArray, grid) {
-    coordinatesArray.forEach((xy) => {
-      const cell = grid.querySelector(`[data-x="${xy.x}"][data-y="${xy.y}"]`);
-      cell.style.cssText = 'background-color:rgba(160,160,160,0.7)';
-    });
-  }
+  function saveShipsPosition() {}
 
-  return { renderShips };
+  return { saveShipsPosition };
 };
